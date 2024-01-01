@@ -55,26 +55,37 @@ def get_access_token(refresh_token, client_id, client_secret):
 
 def main():
     random.shuffle(calls)
-    endpoints = calls[random.randint(0,10)::]
+    endpoints = calls[random.randint(0, 10)::]
     access_token = get_access_token(refresh_token, client_id, client_secret)
     session = requests.Session()
     session.headers.update({
         'Authorization': access_token,
         'Content-Type': 'application/json'
     })
+
+    with open('ok.python', 'a') as log_file:
+        log_file.write(f'\n\n--- Run started at {datetime.datetime.now()} ---\n')
+
     num = 0
     for endpoint in endpoints:
         try:
             response = session.get(endpoint)
+            log_message = f'{num}th Call: {endpoint}, Status Code: {response.status_code}\n'
+
+            with open('ok.python', 'a') as log_file:
+                log_file.write(log_message)
+
             if response.status_code == 200:
                 num += 1
                 print(f'{num}th Call successful')
+
         except requests.exceptions.RequestException as e:
             print(e)
             pass
-    localtime = time.asctime(time.localtime(time.time()))
-    print('The end of this run is :', localtime)
-    print('Number of calls is :', str(len(endpoints)))
 
-for _ in range(3):
+    localtime = time.asctime(time.localtime(time.time()))
+    print('The end of this run is:', localtime)
+    print('Number of calls is:', str(len(endpoints)))
+
+for _ in range(2):
     main()
