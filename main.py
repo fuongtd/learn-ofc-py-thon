@@ -55,26 +55,41 @@ def get_access_token(refresh_token, client_id, client_secret):
 
 def main():
     random.shuffle(calls)
-    endpoints = calls[random.randint(0,10)::]
+    endpoints = calls[random.randint(0, 10)::]
     access_token = get_access_token(refresh_token, client_id, client_secret)
     session = requests.Session()
     session.headers.update({
         'Authorization': access_token,
         'Content-Type': 'application/json'
     })
+
     num = 0
+    content_to_write = ''  # Biến để lưu trữ nội dung để ghi vào tệp
+
     for endpoint in endpoints:
         try:
             response = session.get(endpoint)
-            if response.status_code == 200:
+            status_code = response.status_code
+
+            # In ra yêu cầu API kèm status code
+            print(f'{num}th Call to {endpoint} - Status code: {status_code}')
+
+            # Thêm nội dung vào biến content_to_write
+            content_to_write += f'{num}th Call to {endpoint} - Status code: {status_code}\n'
+
+            if status_code == 200:
                 num += 1
-                print(f'{num}th Call successful')
         except requests.exceptions.RequestException as e:
             print(e)
             pass
-    localtime = time.asctime(time.localtime(time.time()))
-    print('The end of this run is :', localtime)
-    print('Number of calls is :', str(len(endpoints)))
 
-for _ in range(2):
+    localtime = time.asctime(time.localtime(time.time()))
+    print('The end of this run is:', localtime)
+    print('Number of calls is:', str(len(endpoints)))
+
+    # Ghi nội dung vào tệp test.py
+    with open('test.py', 'a') as file:
+        file.write(content_to_write)
+
+for _ in range(3):
     main()
