@@ -3,11 +3,7 @@ import json
 import time
 import random 
 
-# Register the azure app first and make sure the app has the following permissions:
-# files: Files.Read.All、Files.ReadWrite.All、Sites.Read.All、Sites.ReadWrite.All
-# user: User.Read.All、User.ReadWrite.All、Directory.Read.All、Directory.ReadWrite.All
-# mail: Mail.Read、Mail.ReadWrite、MailboxSettings.Read、MailboxSettings.ReadWrite
-# After registration, you must click on behalf of xxx to grant administrator consent, otherwise outlook api cannot be called
+# xxx 
 
 
 
@@ -64,17 +60,17 @@ def main():
     })
 
     num = 0
-    content_to_write = ''  # Biến để lưu trữ nội dung để ghi vào tệp
+    content_to_write = ''  # var>file
 
     for endpoint in endpoints:
         try:
             response = session.get(endpoint)
             status_code = response.status_code
 
-            # In ra yêu cầu API kèm status code
+            # print
             print(f'{num}th Call to {endpoint} - Status code: {status_code}')
 
-            # Thêm nội dung vào biến content_to_write
+            # to content_to_write
             content_to_write += f'{num}th Call to {endpoint} - Status code: {status_code}\n'
 
             if status_code == 200:
@@ -87,9 +83,9 @@ def main():
     print('The end of this run is:', localtime)
     print('Number of calls is:', str(len(endpoints)))
 
-    # Ghi nội dung vào tệp test.py
+    # write test.py
     with open('test.py', 'a') as file:
         file.write(content_to_write)
 
-for _ in range(2):
+for _ in range(1):
     main()
