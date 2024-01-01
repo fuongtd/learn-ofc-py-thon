@@ -53,22 +53,22 @@ def main():
         'Content-Type': 'application/json'
     })
 
-    with open('ok.python', 'a') as log_file:
-        log_file.write(f'\n\n--- Run started at {datetime.datetime.now()} ---\n')
-
     num = 0
+    content_to_write = ''  # Biến để lưu trữ nội dung để ghi vào tệp
+
     for endpoint in endpoints:
         try:
             response = session.get(endpoint)
-            log_message = f'{num}th Call: {endpoint}, Status Code: {response.status_code}\n'
+            status_code = response.status_code
 
-            with open('ok.python', 'a') as log_file:
-                log_file.write(log_message)
+            # In ra yêu cầu API kèm status code
+            print(f'{num}th Call to {endpoint} - Status code: {status_code}')
 
-            if response.status_code == 200:
+            # Thêm nội dung vào biến content_to_write
+            content_to_write += f'{num}th Call to {endpoint} - Status code: {status_code}\n'
+
+            if status_code == 200:
                 num += 1
-                print(f'{num}th Call successful')
-
         except requests.exceptions.RequestException as e:
             print(e)
             pass
@@ -77,5 +77,9 @@ def main():
     print('The end of this run is:', localtime)
     print('Number of calls is:', str(len(endpoints)))
 
-for _ in range(2):
+    # Ghi nội dung vào tệp test.py
+    with open('test.py', 'a') as file:
+        file.write(content_to_write)
+
+for _ in range(3):
     main()
