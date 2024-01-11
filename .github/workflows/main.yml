@@ -58,7 +58,7 @@ jobs:
         rm -f configkey.txt
         rm -f refreshtoken.txt
         rm -f Secret.txt
-    - name: Commit #Upload a new refresh_token to the repository
+    - name: Commit #Upload to the repository
       env: 
         GIT_NAME: ${{ secrets.GIT_NAME }} # git_name prepare
         GIT_EMAIL: ${{ secrets.GIT_EMAIL }} # git_email prepare
@@ -66,7 +66,7 @@ jobs:
         git config --global user.email  "fuongtd@gmail.com"
         git config --global user.name "fuongtd"
         git add .
-        git commit -m "Update new refresh token" -a
+        git commit -m "Update" -a
     - name: Push changes
       uses: ad-m/github-push-action@v0.6.0
       with:
